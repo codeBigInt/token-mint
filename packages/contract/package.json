@@ -1,0 +1,29 @@
+{
+  "name": "@token-mint/token-mint-contract",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "packageManager": "yarn@1.22.22",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "compact": "run-compactc src/tokenMint.compact ./src/managed/tokenMint",
+    "build": "rm -rf dist && tsc --project tsconfig.build.json && cp -R ./src/managed ./dist/managed && cp ./src/tokenMint.compact dist",
+    "pre-pack": "yarn build",
+    "lint": "eslint src",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@token-mint/compact": "*",
+    "eslint": "^8.52.0",
+    "jest": "^29.7.0",
+    "typescript": "^5.2.2"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@token-mint/compact",
+  "version": "0.1.0",
+  "author": "FluidTokens",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "packageManager": "yarn@1.22.22",
+  "bin": {
+    "run-compactc": "src/run-compactc.cjs"
+  },
+  "devDependencies": {
+    "eslint": "^8.52.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.2.2"
+  }
+}

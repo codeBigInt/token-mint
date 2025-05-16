@@ -1,0 +1,38 @@
+pragma language_version >= 0.14;
+import CompactStandardLibrary;
+
+export ledger totalValueMinted: Uint<64>;
+export ledger counter: Counter;
+export ledger nonce: Bytes<32>;
+export ledger collateralPool: Uint<64>;
+
+export { CoinInfo };
+
+constructor(initialNonce: Bytes<32>) {
+    nonce = initialNonce;
+}
+
+witness mintAmt(): Uint<64>;
+
+export circuit mintGoldToken (coin: CoinInfo): [] {
+    counter.increment(1);
+    const amount_to_mint = disclose(mintAmt());
+    const expectedCoinInput = amount_to_mint * 2;
+    assert coin.value > expectedCoinInput "Insufficient collateral provided";
+    receive(coin);
+    const newNonce = evolve_nonce(counter, nonce);
+    totalValueMinted = totalValueMinted + amount_to_mint as Uint<64>;
+    // Mint token to user
+    mint_token(pad(32, "lucky_gold"), amount_to_mint, newNonce, left<ZswapCoinPublicKey, ContractAddress>(own_public_key()));
+    collateralPool = collateralPool + coin.value as Uint<64>;
+    nonce = newNonce;
+}
+
+export circuit mintFreeToken(): []{
+    counter.increment(1);
+    const newNonce = evolve_nonce(counter, nonce);
+    const amount = 1000;
+    totalValueMinted = totalValueMinted + amount as Uint<64>;
+    mint_token(pad(32, "lucky_freebies"), amount, newNonce, left<ZswapCoinPublicKey, ContractAddress>(own_public_key()));
+    nonce = newNonce;
+}
